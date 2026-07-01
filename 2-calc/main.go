@@ -8,14 +8,14 @@ import (
 )
 
 func main() {
-	userChoice := 0
-	fmt.Println("Выберите нужный пункт меню")
-	fmt.Println("1. AVG")
-	fmt.Println("2. SUM")
-	fmt.Println("3. MED")
-	fmt.Println("4. Выход")
-	fmt.Scan(&userChoice)
 	for {
+		userChoice := 0
+		fmt.Println("Выберите нужный пункт меню")
+		fmt.Println("1. AVG")
+		fmt.Println("2. SUM")
+		fmt.Println("3. MED")
+		fmt.Println("4. Выход")
+		fmt.Scan(&userChoice)
 		switch userChoice {
 		case 1:
 			avg := getAvg()
@@ -38,11 +38,11 @@ func convertStrToNum(str string) []float64 {
 	arr := make([]float64, 0, len(parts))
 
 	for _, part := range parts {
-		num, err := strconv.Atoi(part)
+		num, err := strconv.ParseFloat(part, 64)
 		if err != nil {
-			fmt.Println("ERROR: ошибка при конвертации числа")
+			panic("ERROR: ошибка при конвертации числа")
 		}
-		arr = append(arr, float64(num))
+		arr = append(arr, num)
 	}
 	return arr
 }
