@@ -35,26 +35,21 @@ func converter(value float64, initial, target string) float64 {
 		return value
 	}
 
-	var inUSD float64
-	switch initial {
-	case "USD":
-		inUSD = value
-	case "EUR":
-		inUSD = value / USD_TO_EUR
-	case "RUB":
-		inUSD = value / USD_TO_RUB
+	ratesToUSD := map[string]float64{
+		"USD": 1.0,
+		"EUR": 1.08,
+		"RUB": 0.011,
 	}
 
-	switch target {
-	case "USD":
-		return inUSD
-	case "EUR":
-		return inUSD * USD_TO_EUR
-	case "RUB":
-		return inUSD * USD_TO_RUB
+	rateInit, okInit := ratesToUSD[initial]
+	rateTarget, okTarget := ratesToUSD[target]
+
+	if !okInit || !okTarget {
+		return 0
 	}
 
-	return 0
+	valueInUSD := value * rateInit
+	return valueInUSD / rateTarget
 }
 
 func getUserInput() (string, float64, string) {
