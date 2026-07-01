@@ -3,10 +3,10 @@ package main
 import "time"
 
 type Bin struct {
-	id        string
-	private   bool
-	createdAt time.Time
-	name      string
+	Id        string
+	Private   bool
+	CreatedAt time.Time
+	Name      string
 }
 
 type BinList struct {
@@ -15,10 +15,10 @@ type BinList struct {
 
 func NewBin(id, name string, private bool) *Bin {
 	return &Bin{
-		id:        id,
-		private:   private,
-		createdAt: time.Now(),
-		name:      name,
+		Id:        id,
+		Private:   private,
+		CreatedAt: time.Now(),
+		Name:      name,
 	}
 }
 func NewBinList(bins ...Bin) *BinList {
