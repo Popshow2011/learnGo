@@ -10,8 +10,14 @@ const USD_TO_RUB = 82.50
 const EUR_TO_RUB = USD_TO_RUB / USD_TO_EUR
 
 func main() {
+	ratesToUSD := map[string]float64{
+		"USD": 1.0,
+		"EUR": 1.08,
+		"RUB": 0.011,
+	}
+
 	initialCurr, value, targetCurr := getUserInput()
-	result := converter(value, initialCurr, targetCurr)
+	result := converter(value, initialCurr, targetCurr, &ratesToUSD)
 	fmt.Println(result)
 
 }
@@ -27,34 +33,24 @@ func availableCurrency(curr string) string {
 	}
 }
 
-func converter(value float64, initial, target string) float64 {
+func converter(value float64, initial, target string, ratesTo *map[string]float64) float64 {
 	initial = strings.ToUpper(initial)
 	target = strings.ToUpper(target)
+	ratesToUSD := *ratesTo
 
 	if initial == target {
 		return value
 	}
 
-	var inUSD float64
-	switch initial {
-	case "USD":
-		inUSD = value
-	case "EUR":
-		inUSD = value / USD_TO_EUR
-	case "RUB":
-		inUSD = value / USD_TO_RUB
+	rateInit, okInit := ratesToUSD[initial]
+	rateTarget, okTarget := ratesToUSD[target]
+
+	if !okInit || !okTarget {
+		return 0
 	}
 
-	switch target {
-	case "USD":
-		return inUSD
-	case "EUR":
-		return inUSD * USD_TO_EUR
-	case "RUB":
-		return inUSD * USD_TO_RUB
-	}
-
-	return 0
+	valueInUSD := value * rateInit
+	return valueInUSD / rateTarget
 }
 
 func getUserInput() (string, float64, string) {
