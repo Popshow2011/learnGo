@@ -1,8 +1,8 @@
 package file
 
 import (
-	"encoding/json"
 	"os"
+	"path/filepath"
 )
 
 type File struct {
@@ -21,8 +21,12 @@ func (f File) ReadFile() ([]byte, error) {
 	return b, nil
 }
 
-func (f File) IsJson(data []byte) bool {
-	return json.Valid(data)
+func (f File) IsJson() bool {
+	if filepath.Ext(f.Path) == ".json" {
+		return true
+	} else {
+		return false
+	}
 }
 
 func NewConstructor(path string) *File {
