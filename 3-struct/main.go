@@ -1,11 +1,11 @@
 package main
 
-import (
-	"fmt"
-	"test/3-struct/file"
-)
+import "test/3-struct/storage"
+
+const str = "asdasasd"
 
 func main() {
-	file := file.NewConstructor("notebook.json")
-	fmt.Println(file)
+	store := storage.NewStorage("data.json")
+	store.Write([]byte(str))
+	store.Read()
 }
