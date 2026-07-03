@@ -9,9 +9,9 @@ import (
 
 func main() {
 	var menu = map[string]func() float64{
-		"AVG": getAvg,
-		"SUM": getSum,
-		"MED": getMedian,
+		"1": getAvg,
+		"2": getSum,
+		"3": getMedian,
 	}
 	for {
 		userChoice := "0"
@@ -22,7 +22,8 @@ func main() {
 		fmt.Println("4. Выход")
 		fmt.Scan(&userChoice)
 		startMenu := menu[strings.ToUpper(userChoice)]
-		startMenu()
+		result := startMenu()
+		fmt.Println(result)
 
 	}
 
