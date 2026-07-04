@@ -15,6 +15,7 @@ type API struct {
 func NewApi(s storage.Storage, config config.Config) *API {
 	return &API{
 		storage: s,
+		Key:     config,
 	}
 }
 
