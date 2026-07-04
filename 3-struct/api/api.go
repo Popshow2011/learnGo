@@ -3,14 +3,16 @@ package api
 import (
 	"encoding/json"
 	"test/3-struct/bins"
+	"test/3-struct/config"
 	"test/3-struct/storage"
 )
 
 type API struct {
 	storage storage.Storage
+	Key     config.Config
 }
 
-func NewApi(s storage.Storage) *API {
+func NewApi(s storage.Storage, config config.Config) *API {
 	return &API{
 		storage: s,
 	}
