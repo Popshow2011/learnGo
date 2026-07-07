@@ -8,27 +8,23 @@ import (
 )
 
 func main() {
+	var menu = map[string]func() float64{
+		"1": getAvg,
+		"2": getSum,
+		"3": getMedian,
+	}
 	for {
-		userChoice := 0
+		userChoice := "0"
 		fmt.Println("Выберите нужный пункт меню")
 		fmt.Println("1. AVG")
 		fmt.Println("2. SUM")
 		fmt.Println("3. MED")
 		fmt.Println("4. Выход")
 		fmt.Scan(&userChoice)
-		switch userChoice {
-		case 1:
-			avg := getAvg()
-			fmt.Println(avg)
-		case 2:
-			sum := getSum()
-			fmt.Println(sum)
-		case 3:
-			med := getMedian()
-			fmt.Println(med)
-		default:
-			return
-		}
+		startMenu := menu[strings.ToUpper(userChoice)]
+		result := startMenu()
+		fmt.Println(result)
+
 	}
 
 }

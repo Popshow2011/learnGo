@@ -4,11 +4,16 @@ import (
 	"os"
 )
 
-type Storage struct {
+type FileStorage struct {
 	FilePath string
 }
 
-func (s Storage) SaveBinToJson(bin []byte) (bool, error) {
+type Storage interface {
+	Write([]byte) (bool, error)
+	Read() ([]byte, error)
+}
+
+func (s FileStorage) Write(bin []byte) (bool, error) {
 	_, err := os.OpenFile(s.FilePath, 0, 0)
 	if err != nil {
 		return false, err
@@ -22,7 +27,7 @@ func (s Storage) SaveBinToJson(bin []byte) (bool, error) {
 	return true, nil
 }
 
-func (s Storage) ReadBinToJson() ([]byte, error) {
+func (s FileStorage) Read() ([]byte, error) {
 	_, err := os.OpenFile(s.FilePath, 0, 0)
 	if err != nil {
 		return nil, err
@@ -34,8 +39,8 @@ func (s Storage) ReadBinToJson() ([]byte, error) {
 	return bytes, nil
 }
 
-func NewStorage(path string) *Storage {
-	return &Storage{
+func NewStorage(path string) *FileStorage {
+	return &FileStorage{
 		FilePath: path,
 	}
 }
