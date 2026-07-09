@@ -24,21 +24,20 @@ func main() {
 	id := flag.String("id", "", "Введите ID Bin")
 
 	flag.Parse()
+	bin := bins.NewBin("123", "MyBin", false)
 
 	switch {
 	case *create:
 		apiService.CreateBin(bin)
 	case *update:
-		apiService.PutBin(bin, id)
+		apiService.PutBin(bin, *id)
 	case *delete:
-		apiService.DeleteBin(id)
+		apiService.DeleteBin(*id)
 	case *get:
-		apiService.GetBin(id)
+		apiService.GetBin(*id)
 	case *list:
 		apiService.GetAll()
 
 	}
-
-	bin := bins.NewBin("123", "MyBin", false)
 
 }
