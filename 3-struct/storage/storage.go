@@ -19,7 +19,7 @@ type CloudStorage struct {
 type Storage interface {
 	SaveBin(bins.Bin) error
 	GetBin(string) (bins.Bin, error)
-	// UpdatedBin(bins.Bin) error
+	UpdateBin(bins.Bin, string) error
 	DeleteBin(string) error
 	GetAllBins() (bins.BinList, error)
 }
@@ -96,7 +96,34 @@ func (s *CloudStorage) GetBin(id string) (bins.Bin, error) {
 	return bin, nil
 }
 
-// func (s *CloudStorage) UpdateBin(bin bins.Bin) error {}
+func (s *CloudStorage) UpdateBin(bin bins.Bin, id string) error {
+	data, err := json.Marshal(bin)
+	if err != nil {
+		return err
+	}
+	url, _ := url.JoinPath(s.baseUrl, "/b/", id)
+	req, err := http.NewRequest("PUT", url, bytes.NewReader(data))
+	if err != nil {
+		return err
+	}
+	fmt.Println("req", req)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Master-Key", s.KEY)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	fmt.Println(resp.StatusCode)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("failed to save bin: status %d, body: %s", resp.StatusCode, string(body))
+	}
+	return nil
+}
 
 func (s *CloudStorage) DeleteBin(id string) error {
 	url, err := url.JoinPath(s.baseUrl, "/b/", id)

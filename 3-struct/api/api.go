@@ -31,6 +31,10 @@ func (a *API) DeleteBin(id string) error {
 	return a.storage.DeleteBin(id)
 }
 
+func (a *API) PutBin(bin bins.Bin, id string) error {
+	return a.storage.UpdateBin(bin, id)
+}
+
 func (a *API) GetAll() (bins.BinList, error) {
 	allBins, err := a.storage.GetAllBins()
 	if err != nil {
