@@ -1,36 +1,40 @@
 package api
 
 import (
-	"encoding/json"
 	"test/3-struct/bins"
-	"test/3-struct/config"
 	"test/3-struct/storage"
 )
 
 type API struct {
 	storage storage.Storage
-	Key     config.Config
 }
 
-func NewApi(s storage.Storage, config config.Config) *API {
+func NewApi(s storage.Storage) *API {
 	return &API{
 		storage: s,
-		Key:     config,
 	}
 }
 
-func (a *API) SaveBin(bin *bins.Bin) error {
-	data, _ := json.Marshal(bin)
-	_, err := a.storage.Write(data)
-	return err
+func (a *API) CreateBin(bin bins.Bin) error {
+	return a.storage.SaveBin(bin)
 }
 
-func (a *API) LoadBins() (*bins.BinList, error) {
-	data, err := a.storage.Read()
+func (a *API) GetBin(id string) (bins.Bin, error) {
+	bin, err := a.storage.GetBin(id)
 	if err != nil {
-		return nil, err
+		return bins.Bin{}, err
 	}
-	var binList bins.BinList
-	json.Unmarshal(data, &binList)
-	return &binList, nil
+	return bin, nil
+}
+
+func (a *API) DeleteBin(id string) error {
+	return a.storage.DeleteBin(id)
+}
+
+func (a *API) GetAll() (bins.BinList, error) {
+	allBins, err := a.storage.GetAllBins()
+	if err != nil {
+		return bins.BinList{}, err
+	}
+	return allBins, nil
 }

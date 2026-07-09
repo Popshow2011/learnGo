@@ -1,27 +1,30 @@
 package config
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Key string
+	Key     string
+	BaseUrl string
 }
 
-func (c *Config) NewConfig() *Config {
+func NewConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
 		panic("no dotenv var")
 	}
+
 	key := os.Getenv("KEY")
-	fmt.Println(key)
-	if key == "" {
-		panic("Key variable env required")
+	baseUrl := os.Getenv("BASE_URL")
+
+	if key == "" || baseUrl == "" {
+		panic("variable env required")
 	}
 	return &Config{
-		Key: key,
+		Key:     key,
+		BaseUrl: baseUrl,
 	}
 }

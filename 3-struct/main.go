@@ -11,13 +11,26 @@ import (
 const str = "asdasasd"
 
 func main() {
-	var store storage.Storage = storage.NewStorage("data.json")
-	var config config.Config = config.Config{}
-	apiService := api.NewApi(store, *config.NewConfig())
 
-	bin := bins.NewBin("123", "MyBin", false)
-	apiService.SaveBin(bin)
+	config := config.NewConfig()
+	var store storage.Storage = storage.NewStorage(config.BaseUrl, config.Key)
+	apiService := api.NewApi(store)
 
-	loadedBins, _ := apiService.LoadBins()
-	fmt.Println(loadedBins)
+	bin := *bins.NewBin("123", "MyBin", false)
+	fmt.Println(bin)
+	// err := apiService.CreateBin(bin)
+	// fmt.Println(err, store)
+
+	rBin, err := apiService.GetBin("6a4ff2f2da38895dfe478d5b")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = apiService.DeleteBin("6a4ff2f2da38895dfe478d5b")
+	allBins, err := apiService.GetAll()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(rBin, allBins)
+
 }
